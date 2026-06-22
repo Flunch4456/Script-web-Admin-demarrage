@@ -28,15 +28,15 @@ L'application sera accessible à `http://localhost:3000`
 ```
 admin-script-web/
 ├── index.js                    # Fichier principal de l'application
-├── Auto admin region V-2.ps1  # Script PowerShell à distribuer
-├── package.json               # Dépendances et configuration npm
-├── package-lock.json          # Lock file pour npm
-├── ecosystem.config.js        # Configuration PM2 pour production
-├── .env.example              # Variables d'environnement (exemple)
-├── .gitignore                # Fichiers à ignorer dans Git
-├── nginx.conf                # Configuration Nginx (reverse proxy)
-├── DEBIAN_SETUP.md           # Guide de déploiement sur Debian 13
-└── README.md                 # Ce fichier
+├── Auto admin region V-2.ps1   # Script PowerShell à distribuer
+├── package.json                # Dépendances et configuration npm
+├── package-lock.json           # Lock file pour npm
+├── ecosystem.config.js         # Configuration PM2 pour production
+├── .env.example                # Variables d'environnement (exemple)
+├── .gitignore                  # Fichiers à ignorer dans Git
+├── nginx.conf                  # Configuration Nginx (reverse proxy)
+├── DEBIAN_SETUP.md             # Guide de déploiement sur Debian 13
+└── README.md                   # Ce fichier
 ```
 
 ## 📦 Dépendances
@@ -182,24 +182,13 @@ npm install express@latest
 - [Nginx Documentation](https://nginx.org/en/docs/)
 - [Let's Encrypt](https://letsencrypt.org/)
 
-## 📄 Licence
+## 👤 Auteur de Admin Script Web
 
-ISC
-
-## 👤 Auteur
-
-Admin Script Web
+- Flunch4456
 
 ## 🤝 Contribution
 
-Les contributions sont bienvenues ! Pour contribuer:
-
-1. Fork le projet
-2. Créer une branche (`git checkout -b feature/AmazingFeature`)
-3. Commit les modifications (`git commit -m 'Add some AmazingFeature'`)
-4. Push vers la branche (`git push origin feature/AmazingFeature`)
-5. Créer une Pull Request
-
+Les contributions sont les bienvenues !
 ---
 
 **Note** : Ce script télécharge et exécute du code à distance. À utiliser uniquement dans un environnement de confiance avec les droits administrateur appropriés.
