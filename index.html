@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Setup — Script Windows</title>
+
+    <meta
+        name="description"
+        content="Script PowerShell pour configurer un compte administrateur Windows."
+    >
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #080b12;
+            --card: #111722;
+            --card-hover: #151d2a;
+            --border: #263244;
+            --text: #f4f7fb;
+            --muted: #9ca8ba;
+            --accent: #5865f2;
+            --accent-hover: #4752c4;
+            --green: #3ddc97;
+            --red: #ff5c5c;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family:
+                Inter,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                Roboto,
+                Arial,
+                sans-serif;
+
+            background:
+                radial-gradient(
+                    circle at top,
+                    rgba(88, 101, 242, 0.18),
+                    transparent 35%
+                ),
+                var(--bg);
+
+            color: var(--text);
+        }
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        header {
+            width: 100%;
+            border-bottom: 1px solid var(--border);
+            background: rgba(8, 11, 18, 0.8);
+            backdrop-filter: blur(12px);
+        }
+
+        .nav {
+            max-width: 1100px;
+            margin: auto;
+            padding: 18px 24px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .logo-icon {
+            width: 34px;
+            height: 34px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 9px;
+
+            background: var(--accent);
+            font-size: 17px;
+        }
+
+        .github-link {
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 14px;
+
+            transition: 0.2s;
+        }
+
+        .github-link:hover {
+            color: white;
+        }
+
+        /* =========================
+           MAIN
+        ========================= */
+
+        main {
+            max-width: 1000px;
+            margin: auto;
+            padding: 80px 24px;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 55px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+
+            padding: 7px 13px;
+
+            border: 1px solid rgba(88, 101, 242, 0.4);
+            border-radius: 999px;
+
+            background: rgba(88, 101, 242, 0.1);
+
+            color: #aeb5ff;
+
+            font-size: 13px;
+            font-weight: 600;
+
+            margin-bottom: 22px;
+        }
+
+        .status-dot {
+            width: 7px;
+            height: 7px;
+
+            border-radius: 50%;
+            background: var(--green);
+
+            box-shadow: 0 0 10px rgba(61, 220, 151, 0.8);
+        }
+
+        h1 {
+            font-size: clamp(38px, 6vw, 68px);
+            line-height: 1.05;
+            letter-spacing: -2px;
+
+            margin-bottom: 20px;
+        }
+
+        .gradient {
+            background: linear-gradient(
+                90deg,
+                #ffffff,
+                #9fa8ff
+            );
+
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            max-width: 650px;
+            margin: auto;
+
+            color: var(--muted);
+
+            font-size: 17px;
+            line-height: 1.7;
+        }
+
+        /* =========================
+           COMMAND CARD
+        ========================= */
+
+        .command-card {
+            background: var(--card);
+
+            border: 1px solid var(--border);
+            border-radius: 18px;
+
+            overflow: hidden;
+
+            box-shadow:
+                0 25px 70px rgba(0, 0, 0, 0.35);
+        }
+
+        .card-header {
+            padding: 18px 22px;
+
+            border-bottom: 1px solid var(--border);
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card-title {
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .windows {
+            color: #8fa0b8;
+            font-size: 13px;
+        }
+
+        .terminal {
+            padding: 25px;
+
+            background: #070a0f;
+
+            overflow-x: auto;
+        }
+
+        .terminal pre {
+            font-family:
+                "Cascadia Code",
+                "Fira Code",
+                Consolas,
+                monospace;
+
+            font-size: 14px;
+            line-height: 1.7;
+
+            color: #dce4f0;
+
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .command {
+            color: #9da7ff;
+        }
+
+        .copy-container {
+            padding: 20px 22px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+
+            border-top: 1px solid var(--border);
+        }
+
+        .copy-info {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .copy-button {
+            border: none;
+
+            padding: 11px 18px;
+
+            border-radius: 9px;
+
+            background: var(--accent);
+            color: white;
+
+            font-size: 14px;
+            font-weight: 600;
+
+            cursor: pointer;
+
+            transition:
+                background 0.2s,
+                transform 0.1s;
+        }
+
+        .copy-button:hover {
+            background: var(--accent-hover);
+        }
+
+        .copy-button:active {
+            transform: scale(0.97);
+        }
+
+        .copy-button.success {
+            background: #249b6b;
+        }
+
+        /* =========================
+           FEATURES
+        ========================= */
+
+        .features {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 18px;
+
+            margin-top: 25px;
+        }
+
+        .feature {
+            padding: 25px;
+
+            background: var(--card);
+
+            border: 1px solid var(--border);
+            border-radius: 15px;
+
+            transition:
+                transform 0.2s,
+                background 0.2s;
+        }
+
+        .feature:hover {
+            transform: translateY(-3px);
+            background: var(--card-hover);
+        }
+
+        .feature-icon {
+            width: 40px;
+            height: 40px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 10px;
+
+            background: rgba(88, 101, 242, 0.12);
+
+            margin-bottom: 17px;
+
+            font-size: 19px;
+        }
+
+        .feature h3 {
+            font-size: 15px;
+            margin-bottom: 9px;
+        }
+
+        .feature p {
+            color: var(--muted);
+
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        /* =========================
+           WARNING
+        ========================= */
+
+        .warning {
+            margin-top: 25px;
+
+            padding: 20px 22px;
+
+            border: 1px solid rgba(255, 193, 7, 0.3);
+
+            border-radius: 14px;
+
+            background: rgba(255, 193, 7, 0.06);
+        }
+
+        .warning-title {
+            color: #ffd76a;
+
+            font-size: 14px;
+            font-weight: 700;
+
+            margin-bottom: 8px;
+        }
+
+        .warning p {
+            color: #b9b6aa;
+
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        footer {
+            max-width: 1000px;
+
+            margin: 30px auto 0;
+
+            padding: 30px 24px 45px;
+
+            text-align: center;
+
+            color: #667085;
+
+            font-size: 12px;
+        }
+
+        footer a {
+            color: #8f9cff;
+            text-decoration: none;
+        }
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 700px) {
+
+            main {
+                padding: 55px 16px;
+            }
+
+            .nav {
+                padding: 15px 16px;
+            }
+
+            .features {
+                grid-template-columns: 1fr;
+            }
+
+            .copy-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .copy-button {
+                width: 100%;
+            }
+
+            h1 {
+                letter-spacing: -1px;
+            }
+
+            .terminal {
+                padding: 18px;
+            }
+
+            .terminal pre {
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- =========================
+         HEADER
+    ========================= -->
+
+    <header>
+
+        <div class="nav">
+
+            <div class="logo">
+
+                <div class="logo-icon">
+                    ⚙
+                </div>
+
+                <span>Admin Setup</span>
+
+            </div>
+
+            <a
+                class="github-link"
+                href="https://github.com/Flunch4456/Script-web-Admin-demarrage"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                GitHub ↗
+            </a>
+
+        </div>
+
+    </header>
+
+
+    <!-- =========================
+         MAIN
+    ========================= -->
+
+    <main>
+
+        <section class="hero">
+
+            <div class="badge">
+
+                <span class="status-dot"></span>
+
+                Windows PowerShell
+
+            </div>
+
+
+            <h1>
+
+                <span class="gradient">
+                    Admin Setup
+                </span>
+
+            </h1>
+
+
+            <p>
+
+                Configure rapidement un compte administrateur local
+                Windows grâce à un script PowerShell.
+
+            </p>
+
+        </section>
+
+
+        <!-- =========================
+             COMMAND
+        ========================= -->
+
+        <section class="command-card">
+
+            <div class="card-header">
+
+                <span class="card-title">
+                    Installation
+                </span>
+
+                <span class="windows">
+                    PowerShell
+                </span>
+
+            </div>
+
+
+            <div class="terminal">
+
+                <pre><span class="command">irm "https://raw.githubusercontent.com/Flunch4456/Script-web-Admin-demarrage/main/Auto%20admin%20region%20V-2.ps1" | iex</span></pre>
+
+            </div>
+
+
+            <div class="copy-container">
+
+                <span class="copy-info">
+                    Copiez la commande puis exécutez-la dans PowerShell.
+                </span>
+
+                <button
+                    class="copy-button"
+                    id="copyButton"
+                    onclick="copyCommand()"
+                >
+                    Copier la commande
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             FEATURES
+        ========================= -->
+
+        <section class="features">
+
+            <div class="feature">
+
+                <div class="feature-icon">
+                    👤
+                </div>
+
+                <h3>
+                    Compte local
+                </h3>
+
+                <p>
+                    Création ou mise à jour d'un compte utilisateur
+                    local Windows.
+                </p>
+
+            </div>
+
+
+            <div class="feature">
+
+                <div class="feature-icon">
+                    🛡️
+                </div>
+
+                <h3>
+                    Administrateur
+                </h3>
+
+                <p>
+                    Ajout du compte au groupe local des administrateurs
+                    Windows.
+                </p>
+
+            </div>
+
+
+            <div class="feature">
+
+                <div class="feature-icon">
+                    ⚡
+                </div>
+
+                <h3>
+                    Rapide
+                </h3>
+
+                <p>
+                    Une seule commande PowerShell permet de récupérer
+                    et lancer le script.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             WARNING
+        ========================= -->
+
+        <section class="warning">
+
+            <div class="warning-title">
+                ⚠️ Attention
+            </div>
+
+            <p>
+
+                Ce script modifie la configuration des comptes
+                utilisateurs Windows et nécessite des privilèges
+                administrateur. Vérifiez le contenu du script avant
+                de l'exécuter et utilisez-le uniquement sur une
+                machine que vous administrez.
+
+            </p>
+
+        </section>
+
+    </main>
+
+
+    <!-- =========================
+         FOOTER
+    ========================= -->
+
+    <footer>
+
+        <p>
+
+            Admin Setup ·
+
+            <a
+                href="https://github.com/Flunch4456/Script-web-Admin-demarrage"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                Source disponible sur GitHub
+            </a>
+
+        </p>
+
+    </footer>
+
+
+    <!-- =========================
+         JAVASCRIPT
+    ========================= -->
+
+    <script>
+
+        const command =
+            'irm "https://raw.githubusercontent.com/Flunch4456/Script-web-Admin-demarrage/main/Auto%20admin%20region%20V-2.ps1" | iex';
+
+
+        async function copyCommand() {
+
+            const button =
+                document.getElementById("copyButton");
+
+
+            try {
+
+                await navigator.clipboard.writeText(command);
+
+
+                button.textContent = "✓ Commande copiée";
+
+                button.classList.add("success");
+
+
+                setTimeout(() => {
+
+                    button.textContent =
+                        "Copier la commande";
+
+                    button.classList.remove("success");
+
+                }, 2500);
+
+
+            } catch (error) {
+
+                /*
+                 * Fallback pour les navigateurs
+                 * qui bloquent Clipboard API.
+                 */
+
+                const textarea =
+                    document.createElement("textarea");
+
+                textarea.value = command;
+
+                textarea.style.position = "fixed";
+                textarea.style.opacity = "0";
+
+                document.body.appendChild(textarea);
+
+                textarea.focus();
+                textarea.select();
+
+                document.execCommand("copy");
+
+                textarea.remove();
+
+
+                button.textContent =
+                    "✓ Commande copiée";
+
+                button.classList.add("success");
+
+
+                setTimeout(() => {
+
+                    button.textContent =
+                        "Copier la commande";
+
+                    button.classList.remove("success");
+
+                }, 2500);
+
+            }
+
+        }
+
+    </script>
+
+</body>
+</html>
